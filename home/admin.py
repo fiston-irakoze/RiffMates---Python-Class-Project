@@ -26,7 +26,7 @@ class DecadeListFilter(admin.SimpleListFilter):
 
 @admin.register(Musician)
 class MusicianAdmin(admin.ModelAdmin):
-    list_display = ('id' , 'first_name' ,'last_name', 'show_weekday')
+    list_display = ('id' , 'first_name' ,'last_name', 'show_weekday','show_bands')
     search_fields = ('first_name__startswith' ,)
     list_filter=(DecadeListFilter,)
     def show_weekday(self, obj):
@@ -35,18 +35,18 @@ class MusicianAdmin(admin.ModelAdmin):
     show_weekday.short_description = 'weekday of birth'
 
 
-    def show_bands(self , odj):
+    def show_bands(self , obj):
         bands=obj.band_set.all()
         if len(bands) == 0:
             return format_html('<i> no bands</i>')
         
         
         plural = 's' if len(bands) > 1 else ''
-        param = '?id__in' + ' , '. join(str(band.id)for band in bands)
+        param = '?id__in=' + ' , '. join([str(band.id)for band in bands])
         url = reverse('admin:bands_band_changelist') + param
-        return format_html('<a href="{}">{}band{}</a>', url, len(bands) , plural)
+        return format_html('<a href="{}">{}band</a>', url, len(bands) , plural)
     
-    show_bands.short_description = 'bands' 
+    show_bands.short_description = 'Bands' 
     
 @admin.register(Band)
 class BandAdmin(admin.ModelAdmin):
