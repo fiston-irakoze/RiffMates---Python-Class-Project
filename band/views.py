@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 def viewAllBands(request):
     musicians_list = Musician.objects.all()
-    paginator = Paginator(musicians_list, 10) 
+    paginator = Paginator(musicians_list, 5) 
 
     page_number = request.GET.get('page')
     try:
