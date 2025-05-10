@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 
 
-def homepage(request):
+def homepage(request): 
     return render(request,'home.html')
 
 def credits(request):
