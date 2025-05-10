@@ -4,15 +4,32 @@
 {% block title %}{{ musician.first_name }} {{ musician.last_name }} | RiffMates{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="card shadow-lg border-0">
+<style>
+    .main-color-bg {
+        background-color: #2A1E5C !important;
+    }
+    .main-color-text {
+        color: #2A1E5C !important;
+    }
+    .secondary-bg {
+        background-color: #453473;
+    }
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card shadow-lg border-0 hover-lift">
         <!-- Header Section -->
-        <div class="bg-dark text-white text-center py-5 position-relative">
-            <h1 class="display-4 fw-bold mb-3">
-                {{ musician.first_name }} <span class="text-success">{{ musician.last_name }}</span>
+        <div class="main-color-bg text-white text-center py-5 position-relative rounded-top">
+            <h1 class="display-2 fw-bold mb-3">
+                <span class="text-white">{{ musician.first_name }}</span> 
+                <span class="text-warning">{{ musician.last_name }}</span>
             </h1>
-            <div class="badge rounded-pill bg-success text-dark px-3 py-2 shadow-sm">
-                <i class="bi bi-balloon me-2"></i>
+            <div class="badge rounded-pill secondary-bg text-white px-4 py-2 fs-5 shadow-sm">
+                <i class="bi bi-star-fill me-2"></i>
                 Born {{ musician.birth|date:"F j, Y" }}
             </div>
         </div>
@@ -23,37 +40,40 @@
                 <!-- Left Column -->
                 <div class="col-lg-8">
                     <div class="mb-4">
-                        <div class="bg-dark text-white d-inline-block px-4 py-2 rounded shadow-sm">
+                        <div class="main-color-bg text-white d-inline-block px-4 py-2 rounded-3 shadow-sm fs-5">
                             <i class="bi bi-clock-history me-2"></i>
-                            {{ musician.first_name }} is {{ musician.birth|timesince }} old
+                            {{ musician.first_name }} is {{ musician.birth|timesince }} young
                         </div>
                     </div>
 
-                    <h3 class="mb-3 border-bottom pb-2">
-                        <i class="bi bi-journal-text me-2 text-primary"></i>
-                        Biography
+                    <h3 class="mb-4 border-bottom pb-3 main-color-text">
+                        <i class="bi bi-journal-text me-2"></i>
+                        Artist Story
                     </h3>
-                    <p class="fst-italic text-muted lead">
-                        "{{ musician.bio|default:"A talented musician whose story is yet to be written..." }}"
+                    <p class="fst-italic fs-5 text-dark lh-lg">
+                        "{{ musician.bio|default:"A visionary artist whose legacy continues to evolve..." }}"
                     </p>
                 </div>
 
                 <!-- Right Column (Sidebar) -->
                 <div class="col-lg-4 text-center">
-                    <div class="mb-4">
-                        <div class="rounded-circle bg-light d-flex justify-content-center align-items-center mx-auto" style="width: 200px; height: 200px;">
-                            <i class="bi bi-person-gear text-secondary" style="font-size: 6rem;"></i>
+                    <div class="mb-4 hover-lift">
+                        <div class="rounded-circle secondary-bg d-flex justify-content-center align-items-center mx-auto" 
+                             style="width: 220px; height: 220px;">
+                            <i class="bi bi-person-vcard text-white" style="font-size: 5rem;"></i>
                         </div>
                     </div>
 
                     <div class="d-grid gap-3">
-                        <a href="{% url 'bands' %}" class="btn btn-outline-dark btn-lg py-2">
-                            <i class="bi bi-people me-2"></i>
-                            View All Bands
+                        <a href="{% url 'bands' %}" 
+                           class="btn btn-lg py-3 rounded-pill secondary-bg text-white hover-lift">
+                            <i class="bi bi-people-fill me-2"></i>
+                            Explore Bands
                         </a>
-                        <a href="#" class="btn btn-success btn-lg py-2">
-                            <i class="bi bi-mic me-2"></i>
-                            View Performances
+                        <a href="#" 
+                           class="btn btn-lg py-3 rounded-pill main-color-bg text-white hover-lift">
+                            <i class="bi bi-mic-mute-fill me-2"></i>
+                            Upcoming Shows
                         </a>
                     </div>
                 </div>

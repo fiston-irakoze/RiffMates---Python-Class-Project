@@ -1,16 +1,51 @@
 {% extends "base.html" %}
-
 {% block title %}News | RiffMates{% endblock %}
 
 {% block content %}
-  <h1 class="fs-2 fw-bold mb-4 text-primary">📰 Latest News</h1>
-  <div class="bg-white p-4 rounded shadow-sm border">
-    <ul class="ps-4 mb-0">
-      {% for item in news %}
-        <li class="text-dark fs-5 mb-2">{{ item }}</li>
-      {% empty %}
-        <li class="text-muted fst-italic">No news available at the moment.</li>
-      {% endfor %}
-    </ul>
-  </div>
+<style>
+    .main-color-bg {
+        background-color: #2A1E5C !important;
+    }
+    .main-color-text {
+        color: #2A1E5C !important;
+    }
+    .hover-scale:hover {
+        transform: scale(1.02);
+        transition: all 0.3s ease;
+    }
+</style>
+
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center main-color-bg p-4 rounded-top mb-4 hover-scale">
+        <h1 class="display-4 text-white m-0 fw-bold">
+            <i class="bi bi-megaphone-fill me-3"></i>Latest Updates
+        </h1>
+        <a href="" class="btn btn-lg text-white rounded-pill px-4" style="background-color: #453473;">
+            <i class="bi bi-plus-circle-dotted me-2"></i> Post News
+        </a>
+    </div>
+
+    <!-- News Container -->
+    <div class="card shadow-lg border-0 rounded-3 hover-scale">
+        <div class="card-body p-0">
+            <ul class="list-group list-group-flush">
+                {% for item in news %}
+                <li class="list-group-item d-flex align-items-center py-3 hover-scale" 
+                    style="cursor: pointer; transition: all 0.3s ease;">
+                    <i class="bi bi-star-fill me-3 main-color-text fs-5"></i>
+                    <span class="fs-5 fw-semibold main-color-text m-0">{{ item }}</span>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-center py-5">
+                    <div class="alert main-color-bg text-white fs-5 py-3">
+                        <i class="bi bi-info-circle-fill me-2"></i>
+                        No recent updates available
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,54 +1,73 @@
-<!-- templates/venue_list.html -->
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Venues | RiffMates{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-  <div class="d-flex justify-content-between align-items-center bg-white p-4 shadow-sm rounded mb-4">
-    <h1 class="display-5 text-dark m-0">
-      <i class="bi bi-building me-2"></i>All Venues
-    </h1>
-    <a href="" class="btn btn-success">
-      <i class="bi bi-plus-circle me-1"></i> Add Venue
-    </a>
-  </div>
+<style>
+    .main-color-bg {
+        background-color: #2A1E5C !important;
+    }
+    .main-color-text {
+        color: #2A1E5C !important;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        transition: all 0.3s ease;
+    }
+    .secondary-bg {
+        background-color: #453473;
+    }
+</style>
 
-  <div class="row g-4">
-    {% for venue in venues %}
-    <div class="col-md-6">
-      <div class="card h-100 shadow-sm">
-        <div class="card-header bg-dark text-white">
-          <h5 class="m-0">{{ venue.name }}</h5>
-        </div>
-        <div class="card-body">
-          <h6 class="mb-3">
-            <i class="bi bi-door-open me-2"></i>
-            Rooms ({{ venue.room_set.count }})
-          </h6>
-          <ul class="list-group list-group-flush">
-            {% for room in venue.room_set.all %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              {{ room.name }}
-              <!-- <span class="badge bg-secondary">Capacity: N/A</span> -->
-            </li>
-            {% empty %}
-            <li class="list-group-item text-muted">
-              No rooms available for this venue
-            </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
+<div class="container mt-4">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center main-color-bg p-4 rounded-top mb-4 hover-lift">
+        <h1 class="display-4 text-white m-0 fw-bold">
+            <i class="bi bi-building-fill me-3"></i>Music Venues
+        </h1>
+        <a href="" class="btn btn-lg text-white rounded-pill px-4" style="background-color: #453473;">
+            <i class="bi bi-plus-circle-dotted me-2"></i> New Venue
+        </a>
     </div>
-    {% empty %}
-    <div class="col-12">
-      <div class="alert alert-warning">
-        <i class="bi bi-exclamation-triangle me-2"></i>
-        No venues found.
-      </div>
+
+    <!-- Venues Grid -->
+    <div class="row g-4">
+        {% for venue in venues %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 shadow-lg border-0 hover-lift">
+                <div class="card-header main-color-bg text-white py-3">
+                    <h3 class="m-0 fw-bold">{{ venue.name }}</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="p-4">
+                        <div class="d-flex align-items-center mb-3">
+                            <i class="bi bi-door-open fs-4 main-color-text me-2"></i>
+                            <h4 class="m-0 main-color-text">Facilities ({{ venue.room_set.count }})</h4>
+                        </div>
+                        <ul class="list-group list-group-flush rounded-3 overflow-hidden">
+                            {% for room in venue.room_set.all %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center py-3 hover-lift">
+                                <span class="fw-semibold fs-5">{{ room.name }}</span>
+                                <span class="badge secondary-bg text-white rounded-pill">Capacity: {{ room.capacity }}</span>
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item text-muted py-3">
+                                <i class="bi bi-info-circle me-2"></i>No facilities available
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert main-color-bg text-white fs-5 text-center py-3">
+                <i class="bi bi-building-x me-2"></i>
+                No venues found in our directory
+            </div>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-  </div>
 </div>
 {% endblock %}
