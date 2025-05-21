@@ -2,11 +2,16 @@ from django.shortcuts import render,get_object_or_404
 from .models import Musician 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.shortcuts  import render
+from band.models import Musician, UserProfile
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.contrib.auth.models import User
+
 
 def viewAllBands(request):
     musicians_list = Musician.objects.all()
-    paginator = Paginator(musicians_list, 5) 
+    paginator = Paginator(musicians_list, 10) 
 
     page_number = request.GET.get('page')
     try:
@@ -35,10 +40,10 @@ from .models import Musician, Band, Venue
 
 def musician_list(request):
     # Handle per_page parameter
-    per_page = request.GET.get('per_page', 5)
+    per_page = request.GET.get('per_page', 10)
     try:
         per_page = int(per_page)
-        per_page = min(max(1, per_page), 5)  # Constrain between 1-50
+        per_page = min(max(1, per_page), 50)  # Constrain between 1-50
     except ValueError:
         per_page = 10
 
@@ -66,7 +71,7 @@ def band_list(request):
     per_page = request.GET.get('per_page', 10)
     try:
         per_page = int(per_page)
-        per_page = min(max(1, per_page), 5)
+        per_page = min(max(1, per_page), 50)
     except ValueError:
         per_page = 10
 
@@ -100,43 +105,58 @@ def venue_list(request):
 def restricted_page(request):
     data = {
         'title': 'Restricted Page',
-        'content': '<h1>You are logged in </h1>'
-    }
-    
-    return render(request, "adnew.html", data)
+        'content': '<h1>You are logged in</h1>',
+
+    }    
+
+    return render(request,"general.xhtml", data)
 
 
+...
+from django.http import Http404  
+...
 @login_required
 def musician_restricted(request, musician_id):
     musician = get_object_or_404(Musician, id=musician_id)
-    profile = request.user.userprofile
-    allowed= False
-    
-    if profile.musician_profiles.filter(
+    profile = request.user.userprofile  
+    allowed = False  
+
+    if profile.musician_profiles.filter(  
         id=musician_id).exists():
         allowed = True
     else:
-        musician_profiles = set (profile.musician_profiles.all()
-    )
-    for band in musician.band_set.all():
-        band_musician = set(band.musician.all())
-        if musician_profiles.intersection(
-            band_musician):
-            allowed = True
-            break
         
-        
-        if not allowed:
-            raise Http404("Permission denied")
-        content = f"""
-            <h1>Musician Page: {musician.last_name}</h1>
-            <p>{musician.first_name}</h1>
-            <p>{musician.last_name}</h1>
-            <p>{musician.birth}</h1>
-        """
-        data = {
-            'title': 'musician Restricted',
-            'content': content,
-        }
-        
-        return render (request, 'musician.html', data)
+        musician_profiles = set(
+            profile.musician_profiles.all()  
+        )
+        for band in musician.band_set.all():
+            band_musicians = set(band.musicians.all())
+            if musician_profiles.intersection(
+                band_musicians):  
+                allowed = True  
+                break
+
+    if not allowed:  
+        raise Http404("Permission denied")
+
+    content = f"""
+    <h1>Musician Page: {musician.last_name}</h1>
+    <p>{musician.first_name}</h1>
+    <p>{musician.last_name}</h1>
+    <p>{musician.birth}</h1>
+"""
+    data = {
+        'title': 'Musician Restricted',
+        'content': content,
+    }
+
+    return render(request, "general.xhtml", data)   
+
+@receiver(post_save,sender=User)
+def create_user_profile(sender, **kwargs):
+        if kwargs['created'] and not kwargs['raw']:
+            user = kwargs['instance']
+            try:
+                UserProfile.objects.get(user=user)
+            except UserProfile.DoesNotExist:
+                UserProfile.objects.create(user=user)
