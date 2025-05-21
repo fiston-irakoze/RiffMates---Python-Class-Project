@@ -128,11 +128,11 @@ def musician_restricted(request, musician_id):
         
         if not allowed:
             raise Http404("Permission denied")
-        
-        
-        
         content = f"""
             <h1>Musician Page: {musician.last_name}</h1>
+            <p>{musician.first_name}</h1>
+            <p>{musician.last_name}</h1>
+            <p>{musician.birth}</h1>
         """
         data = {
             'title': 'musician Restricted',
