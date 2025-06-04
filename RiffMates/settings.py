@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'home',
-    'band'
+    'band',
+    'content'
 ]
 
 MIDDLEWARE = [
@@ -102,8 +103,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LOGIN_REDIRECT_URL = 'home'  # Redirect to home after login
-LOGIN_URL = 'login'          # Use named URL pattern for login
-LOGOUT_REDIRECT_URL = 'accounts/login' # Redirect to home after logout
+LOGIN_URL = 'home'          # Use named URL pattern for login
+LOGOUT_REDIRECT_URL = '/admin/login' # Redirect to home after logout
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -126,3 +128,14 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGOUT_REDIRECT_URL = '/'
+
+EMAIL_BACKEND = 'django.core.mail.backend.console.EmailBackend'
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS =[
+    BASE_DIR / "static"
+]

@@ -20,6 +20,8 @@ from home import views as home_views
 from band import views as bandViews
 from band import views as restricted_page
 from band import views as musician_restricted
+from django.contrib.auth import views as auth_views
+from content import views
 
 
 
@@ -36,5 +38,21 @@ urlpatterns = [
     path('band/<int:id>/', bandViews.band_detail, name='band_detail'),
     path('venues/', bandViews.venue_list, name='venue_list'),
     path('restricted_page/',bandViews.restricted_page, name='restricted_page'),
-    path('musician_restricted/<int:musician_id>/',bandViews.musician_restricted, name='musician_restricted')
+    path('musician_restricted/<int:musician_id>/',bandViews.musician_restricted, name='musician_restricted'),
+    
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(template_name='registration/password_reset_form.html'), name='password_reset'),
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(template_name='registration/password_reset_done.html'), name='password_reset_done'),
+    path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'), name='password_reset_confirm'),
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(template_name='registration/password_reset_complete.html'), name='password_reset_complete'),
+    
+    
+    
+    
+    path('comment/', views.comment, name='comment'),
+    path('comment_accepted/', views.comment_accepted, name='comment_accepted'),
+    path('list_ads/', views.list_ads, name='list_ads'),
+    path('Seeking_ad/', views.seeking_ad, name='Seeking_ad'),
+    path("seeking_ad/<int:ad_id>/", views.seeking_ad, name='seeking_ad'),
+
 ]

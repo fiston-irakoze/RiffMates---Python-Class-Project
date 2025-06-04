@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+    {% if request.user.is_authenticated %}
+    
+    {% endif %}
+        <h1 >Musician Seeking Bands</h1>
+        {% for ad in seeking_band %}
+                <div >
+                    <div >{{ad.date|date:"M d, Y"}}</div>
+                    <h3 >
+                        {{ad.Musician.first_name}} {{ad.Musician.last_name}}
+                    </h3>
+                    <p >{{ad.content}}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div>
+            <p >No Ads at this Time</p>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section>
+        
+        {% for ad in seeking_musician %}
+        
+                <div >
+                    <div>{{ad.date|date:"M d, Y"}}</div>
+                    <h3 >{{ad.band.name}}</h3>
+                    <p >{{ad.content}}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div >
+            <p>No Ads at this Time</p>
+        </div>
+        {% endfor %}
+    </section>
+</div>
+{% endblock content %}
