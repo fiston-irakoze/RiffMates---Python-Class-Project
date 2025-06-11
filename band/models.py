@@ -11,9 +11,10 @@ class Musician(models.Model):
     
 class Venue(models.Model):
     name = models.CharField(max_length=50)
-
+    description = models.TextField(blank=True)
+    picture = models.ImageField(blank=True, null=True)
     def __str__(self):
-        return f"id={self.id}, name={self.name}"
+        return f"id={self.id}, name={self.name}, description={self.description}, picture={self.picture}"
 
 class Room(models.Model):
     name = models.CharField(max_length=50)
@@ -38,6 +39,9 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     musician_profiles = models.ManyToManyField(Musician,blank=True)
     venue_controlled=models.ManyToManyField(Venue, blank=True)
+    
+    
+
 
 # Musicians
 # ● Bands

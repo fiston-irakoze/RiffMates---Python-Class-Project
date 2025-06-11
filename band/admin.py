@@ -40,7 +40,7 @@ class MusicianAdmin(admin.ModelAdmin):
             return format_html('<i>no bands</i>')   
         plural = 's' if len(bands)>1 else ''
         param ='?id__in='+','.join([str(band.id) for band in bands])
-        url = reverse('admin:bands_band_changelist')+param
+        url = reverse('admin:band_band_changelist')+param
         return format_html('<a href="{}">{}band</a>', url, len(bands),plural)
     show_bands.short_description = 'Bands'
 
@@ -57,3 +57,26 @@ class UserAdmin(BaseUserAdmin):
     
 admin.site.unregister(User)
 admin.site.register(User,UserAdmin)
+
+@admin.register(Venue)
+class venueAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'show_rooms')
+    search_fields = ('name', )
+    
+    def show_rooms(self, obj):
+        rooms = obj.room_set.all()
+        if len(rooms) == 0:
+            return format_html('<i>no rooms</i>')
+        
+        
+        plural = 's' if len(rooms) > 1 else ''
+        param = '?id__in=' + ','.join(str(room.id) for room in rooms)
+        url = reverse('admin:band_room_changelist') + param
+        return format_html('<a href="{}">{} room{}</a>', url, len(rooms), plural)
+    
+    show_rooms.short_description = 'Rooms'
+    
+@admin.register(Room)
+class RoomAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ('name', )

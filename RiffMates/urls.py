@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
 from home import views as home_views
 from band import views as bandViews
 from band import views as restricted_page
@@ -56,3 +58,7 @@ urlpatterns = [
     path("seeking_ad/<int:ad_id>/", views.seeking_ad, name='seeking_ad'),
 
 ]
+
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

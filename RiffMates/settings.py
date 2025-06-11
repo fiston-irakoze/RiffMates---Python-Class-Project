@@ -133,9 +133,11 @@ LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_REDIRECT_URL = '/'
 
-EMAIL_BACKEND = 'django.core.mail.backend.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS =[
     BASE_DIR / "static"
 ]
+MEDIA_ROOT = BASE_DIR.parent/'outside'/'Riffmate/upload'
+MEDIA_URL = '/media/'

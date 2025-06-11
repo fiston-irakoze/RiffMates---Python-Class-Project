@@ -7,7 +7,7 @@ from band.models import Musician, UserProfile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-
+from band.form import VenueForm
 
 def viewAllBands(request):
     musicians_list = Musician.objects.all()
@@ -160,3 +160,34 @@ def create_user_profile(sender, **kwargs):
                 UserProfile.objects.get(user=user)
             except UserProfile.DoesNotExist:
                 UserProfile.objects.create(user=user)
+@login_required
+def edit_venue(request, venue_id=0):
+    if venue_id !=0:
+        venue = get_object_or_404(Venue,
+           id=venue_id)
+        if not request.user.userprofile.venue_controlled.filter(
+            id=venue_id).exists():
+           raise Http404("can only edit controlled venues")
+       
+    if request.method == 'GET':
+        if venue_id == 0:
+            form = VenueForm()
+        else:
+            form = VenueForm(instance=venue)
+            
+    else:
+        if venue_id == 0:
+            venue = Venue.object.create()
+            
+        form = VenueForm(request.POST, request.FILES,
+            instance=venue)
+        
+        if form.is_valid():
+            venue = form.save()
+            
+            
+    data = {
+        "form": form,
+    }
+    
+    return render(request, "edit_venue.html", data)
